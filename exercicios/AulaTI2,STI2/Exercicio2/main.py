@@ -1,3 +1,22 @@
+# Algoritmo:
+#
+# Geramos três valores aleatórios, o primeiro sendo entre 0 e 10,
+# o segundo e terceiro entre 5 e 20.
+#
+# Utilizando estes valores como a, b, c respetivamente, calculamos
+# a fórmula resolvente, começando com o discriminante (b^2 - 4ac).
+#
+# Se o discriminante for inferior a 0, mostramos ao utilizador que
+# não existem raízes reais.
+# Senão, continuamos com os cálculos. Calculamos a raiz do
+# discriminante e realizamos dois cálculos da fórmula: O positivo
+# e o negativo. Ou seja,  -b +- discriminante / 2 * a
+#
+# No final, mostramos o resultado ao utilizador.
+#
+# (No caso deste programa em específico, repetimos estes passos 5
+# vezes como forma de teste.)
+
 from math import sqrt
 from random import randrange
 
@@ -17,3 +36,4 @@ for i in range(0, 5):
     c = randrange(5, 20)
     print(f'a: {a}; b: {b}; c: {c};')
     print(quadraticFormula(a, b, c))
+    print()
