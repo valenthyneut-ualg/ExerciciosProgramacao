@@ -1,3 +1,7 @@
+# I'm not great at maths in the slightest so I
+# looked online for a solution to this problem
+# https://stackoverflow.com/questions/16007204/factorizing-a-number-in-python
+
 def factors(n: int):
     while n > 1:
         for i in range(2, n + 1):
@@ -20,5 +24,6 @@ if __name__ == "__main__":
                 numFactors = factors(num)
                 factorsString = f'{num} = {' * '.join(str(x) for x in factors(num))}'
                 print(factorsString)
+            print()
         except ValueError:
             print("Inseriu um valor inválido (Este programa só aceita números inteiros positivos)")
