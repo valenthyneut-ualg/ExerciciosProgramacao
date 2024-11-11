@@ -4,7 +4,7 @@ class Board:
         self.state = []
         self.winStates = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 4, 6], [1, 4, 7], [2, 5, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
         ]
 
@@ -23,3 +23,12 @@ class Board:
         if self.state[truePosition] == " ":
             self.state[truePosition] = player
         else: raise ValueError("This position has already been filled!")
+
+    def inWinState(self) -> tuple[True, str] | tuple[False, None]:
+        for winState in self.winStates:
+            boardSlice = []
+            for n in winState:
+                boardSlice.append(self.state[n])
+            if boardSlice[0] != ' ' and boardSlice.count(boardSlice[0]) == len(boardSlice):
+                return True, boardSlice[0]
+        return False, None
