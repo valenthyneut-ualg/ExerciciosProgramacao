@@ -17,3 +17,9 @@ class Board:
         print(f'{self.state[3]} | {self.state[4]} | {self.state[5]}')
         print('---------')
         print(f'{self.state[6]} | {self.state[7]} | {self.state[8]}')
+
+    def play(self, player: str, linePosition: int, columnPosition: int):
+        truePosition = (3 * (linePosition - 1) + columnPosition) - 1
+        if self.state[truePosition] == " ":
+            self.state[truePosition] = player
+        else: raise ValueError("This position has already been filled!")
