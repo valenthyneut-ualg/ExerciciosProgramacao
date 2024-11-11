@@ -22,13 +22,14 @@ class Board:
         truePosition = (3 * (linePosition - 1) + columnPosition) - 1
         if self.state[truePosition] == " ":
             self.state[truePosition] = player
-        else: raise ValueError("This position has already been filled!")
+        else: raise ValueError("Esta posição já foi ocupada!")
 
     def inWinState(self) -> tuple[True, str] | tuple[False, None]:
         for winState in self.winStates:
             boardSlice = []
             for n in winState:
                 boardSlice.append(self.state[n])
-            if boardSlice[0] != ' ' and boardSlice.count(boardSlice[0]) == len(boardSlice):
+            if boardSlice[0] != " " and boardSlice.count(boardSlice[0]) == len(boardSlice):
                 return True, boardSlice[0]
+
         return False, None
