@@ -1,8 +1,21 @@
+# Algoritmo do jogo:
+#
+# Num loop:
+#   Mostrar o estado do jogo (apresentar o quadro)
+#   Verificar o estado do jogo,
+#   se sim:
+#       parar o jogo, dizer qual o jogador que ganhou (ou se foi um empate)
+#   se não:
+#       deixar o respetivo jogador colocar o seu símbolo no quadro
+#       alternar o turno dos jogadores
+#       repetir
+
 from TicTacToe.Board import Board
 
 if __name__ == "__main__":
     board = Board()
     turn = True
+    turnPlayer = "X" if turn else "O"
 
     print("Insira um par de coordenadas separado por vírgula onde:")
     print("O primeiro número é a linha e o segundo a coluna.")
@@ -10,8 +23,6 @@ if __name__ == "__main__":
     print("(QUIT para parar)")
 
     while True:
-        turnPlayer = "X" if turn else "O"
-
         print()
         board.display()
 
