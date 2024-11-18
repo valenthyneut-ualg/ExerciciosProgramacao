@@ -50,19 +50,34 @@ class Board:
         trueColCoord = colCoord - 1
 
         # Horizontal win check, traverse across the
-        # column, counting number of equal player
+        # columns, counting number of equal player
         # characters. If it reaches four, win
 
-        curPlayer = ""
+        oldPlayer = ""
         count = 0
         for i in range(8):
-            colPlayer = self.state[trueRowCoord][i]
-            if colPlayer.strip() != "":
-                if curPlayer != colPlayer:
-                    curPlayer = colPlayer
+            newPlayer = self.state[trueRowCoord][i]
+            if newPlayer.strip() != "":
+                if oldPlayer != newPlayer:
+                    oldPlayer = newPlayer
                     count = 1
                 else:
                     count += 1
-            if count >= 4: return True, curPlayer
+            if count >= 4: return True, oldPlayer
+
+        # Vertical win check, traverse across the
+        # current column vertically, (...)
+
+        oldPlayer = ""
+        count = 0
+        for i in range(8):
+            newPlayer = self.state[i][trueColCoord]
+            if newPlayer.strip() != "":
+                if oldPlayer != newPlayer:
+                    oldPlayer = newPlayer
+                    count = 1
+                else:
+                    count += 1
+            if count >= 4: return True, oldPlayer
 
         return False, None
