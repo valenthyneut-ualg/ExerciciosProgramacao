@@ -5,10 +5,16 @@ from FourInARow.Board import Board
 if __name__ == "__main__":
     board = Board()
 
-    coords = (0, 0)
-    for i in range(8):
-        player = "X" if random() > .5 else "O"
-        coords = board.play(player, 1)
+    coords = board.play("X", 1)
+    board.play("X", 2)
+    board.play("X", 2)
+    board.play("X", 3)
+    board.play("X", 3)
+    board.play("X", 3)
+    board.play("O", 4)
+    board.play("X", 4)
+    board.play("X", 4)
+    board.play("X", 4)
 
     board.display()
     print(board.inWinState(coords))

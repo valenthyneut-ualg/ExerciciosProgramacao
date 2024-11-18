@@ -80,4 +80,36 @@ class Board:
                     count += 1
             if count >= 4: return True, oldPlayer
 
+        # Ascending diagonal checks
+        offset = 0
+        diagonal = []
+
+        # Traverse across the grid in an upwards fashion
+        for i in range(8):
+            try:
+                curPoint = self.state[trueRowCoord - offset][trueColCoord + offset]
+                diagonal.append(curPoint)
+            except IndexError: break
+            offset = offset + 1
+
+        offset = -1
+        for i in range(8):
+            try:
+                curPoint = self.state[trueRowCoord - offset][trueColCoord + offset]
+                diagonal.insert(0, curPoint)
+            except IndexError: break
+            offset = offset - 1
+
+        oldPlayer = ""
+        count = 0
+        for i in range(len(diagonal)):
+            curPlayer = diagonal[i]
+            if curPlayer.strip() != "":
+                if oldPlayer != curPlayer:
+                    oldPlayer = curPlayer
+                    count = 1
+                else:
+                    count += 1
+            if count >= 4: return True, oldPlayer
+
         return False, None
