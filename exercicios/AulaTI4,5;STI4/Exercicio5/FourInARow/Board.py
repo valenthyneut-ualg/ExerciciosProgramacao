@@ -17,11 +17,10 @@ class Board:
                 rowString += f' {col} '
 
                 if i != zeroIRowLen: rowString += '|'
-
             print(rowString)
 
         numString = ""
+
         for i in range(8):
             numString += f' {i + 1}  '
-
         print(numString)
