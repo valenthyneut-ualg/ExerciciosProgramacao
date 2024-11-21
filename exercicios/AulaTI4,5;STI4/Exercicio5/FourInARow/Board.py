@@ -61,9 +61,12 @@ class Board:
         diagonal = []
 
         for i in range(8):
+            # In my way of storing the board, the row coordinate increasing means we are going lower into the board, so
+            # everytime we want to go higher in a diagonal, we decrease the coordinate, and vice-versa for if we want to
+            # go lower.
             offsetRowCoord = rowCoord + (-offset if axis == "asc" else offset)
             offsetColCoord = colCoord + offset
-            # We're outside the range of the grid, bail
+            # Bounds checks so we don't get any weird "start from end of array" Python shenanigans
             if offsetRowCoord < 0 or offsetRowCoord > 7 or offsetColCoord < 0 or offsetColCoord > 7: break
 
             diagonal.append(self.state[offsetRowCoord][offsetColCoord])
@@ -75,6 +78,7 @@ class Board:
             offsetColCoord = colCoord + offset
             if offsetRowCoord < 0 or offsetRowCoord > 7 or offsetColCoord < 0 or offsetColCoord > 7: break
 
+            # Insert before the diagonal elements we already have because we're getting the lower elements of it
             diagonal.insert(0, self.state[offsetRowCoord][offsetColCoord])
             offset -= 1
 
