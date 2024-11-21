@@ -38,21 +38,29 @@ class Board:
 
         return lastEmptyRow + 1, column
 
-    def __xyAxisCheck(self, axis: str, rowCoord: int, colCoord: int) -> tuple[True, str] | tuple[False, None]:
-        if axis != "row" and axis != "col": raise ValueError("Eixo inválido! (tem de ser um de 'row' ou 'col')")
-
-        oldPlayer = 0
+    @staticmethod
+    def __fourInARowCheck(playersSlice: list[str]) -> tuple[True, str] | tuple[False, None]:
+        oldPlayer = ""
         count = 0
-        for i in range(8):
-            newPlayer = self.state[rowCoord if axis == "row" else i][colCoord if axis == "col" else i]
+        for i in range(len(playersSlice)):
+            newPlayer = playersSlice[i]
             if newPlayer != " ":
                 if oldPlayer != newPlayer:
                     oldPlayer = newPlayer
                     count = 1
                 else:
                     count += 1
-                if count >= 4: return True, oldPlayer
+            if count >= 4: return True, oldPlayer
         return False, None
+
+    def __xyAxisCheck(self, axis: str, rowCoord: int, colCoord: int) -> tuple[True, str] | tuple[False, None]:
+        if axis != "row" and axis != "col": raise ValueError("Eixo inválido! (tem de ser um de 'row' ou 'col')")
+
+        xyList = []
+        for i in range(8):
+            xyList.append(self.state[rowCoord if axis == "row" else i][colCoord if axis == "col" else i])
+
+        return self.__fourInARowCheck(xyList)
 
     def __diagonalCheck(self, axis: str, rowCoord: int, colCoord: int) -> tuple[True, str] | tuple[False, None]:
         if axis != "asc" and axis != "desc": raise ValueError("Eixo inválido! (tem de ser um de 'asc' ou 'desc')")
@@ -82,18 +90,7 @@ class Board:
             diagonal.insert(0, self.state[offsetRowCoord][offsetColCoord])
             offset -= 1
 
-        oldPlayer = ""
-        count = 0
-        for i in range(len(diagonal)):
-            curPlayer = diagonal[i]
-            if curPlayer != " ":
-                if oldPlayer != curPlayer:
-                    oldPlayer = curPlayer
-                    count = 1
-                else:
-                    count += 1
-            if count >= 4: return True, oldPlayer
-        return False, None
+        return self.__fourInARowCheck(diagonal)
 
     def inWinState(self, propagationPoint: (int, int)) -> tuple[True, str] | tuple[False, None]:
         rowCoord = propagationPoint[0]
