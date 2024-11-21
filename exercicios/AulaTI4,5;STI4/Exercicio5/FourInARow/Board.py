@@ -44,12 +44,11 @@ class Board:
         count = 0
         for i in range(len(playersSlice)):
             newPlayer = playersSlice[i]
-            if newPlayer != " ":
-                if oldPlayer != newPlayer:
-                    oldPlayer = newPlayer
-                    count = 1
-                else:
-                    count += 1
+            if oldPlayer != newPlayer:
+                oldPlayer = newPlayer
+                count = 1
+            else:
+                if newPlayer != " ": count += 1
             if count >= 4: return True, oldPlayer
         return False, None
 
