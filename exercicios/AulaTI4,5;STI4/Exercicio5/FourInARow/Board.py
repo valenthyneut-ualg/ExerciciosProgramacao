@@ -102,16 +102,14 @@ class Board:
             raise ValueError("Nº da coluna tem de estar entre 1 e 8. (inclusivo)")
         trueColCoord = colCoord - 1
 
-        result, player = self.__xyAxisCheck("row", trueRowCoord, trueColCoord)
-        if result: return result, player
+        xyAxes = ("row", "col")
+        for axis in xyAxes:
+            result, player = self.__xyAxisCheck(axis, trueRowCoord, trueColCoord)
+            if result: return result, player
 
-        result, player = self.__xyAxisCheck("col", trueRowCoord, trueColCoord)
-        if result: return result, player
-
-        result, player = self.__diagonalCheck("asc", trueRowCoord, trueColCoord)
-        if result: return result, player
-
-        result, player = self.__diagonalCheck("desc", trueRowCoord, trueColCoord)
-        if result: return result, player
+        diagAxes = ("asc", "desc")
+        for axis in diagAxes:
+            result, player = self.__diagonalCheck(axis, trueRowCoord, trueColCoord)
+            if result: return result, player
 
         return False, None
