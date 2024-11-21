@@ -15,7 +15,7 @@ from TicTacToe.Board import Board
 if __name__ == "__main__":
     board = Board()
     turn = True
-    turnPlayer = "X" if turn else "O"
+
 
     print("Insira um par de coordenadas separado por vírgula onde:")
     print("O primeiro número é a linha e o segundo a coluna.")
@@ -23,6 +23,7 @@ if __name__ == "__main__":
     print("(QUIT para parar)")
 
     while True:
+        turnPlayer = "X" if turn else "O"
         print()
         board.display()
 
