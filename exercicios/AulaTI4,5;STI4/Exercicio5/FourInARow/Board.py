@@ -54,6 +54,43 @@ class Board:
                 if count >= 4: return True, oldPlayer
         return False, None
 
+    def __diagonalCheck(self, axis: str, rowCoord: int, colCoord: int) -> tuple[True, str] | tuple[False, None]:
+        if axis != "asc" and axis != "desc": raise ValueError("Eixo inválido! (tem de ser um de 'asc' ou 'desc')")
+
+        offset = 0
+        diagonal = []
+
+        for i in range(8):
+            offsetRowCoord = rowCoord + (-offset if axis == "asc" else offset)
+            offsetColCoord = colCoord + offset
+            # We're outside the range of the grid, bail
+            if offsetRowCoord < 0 or offsetRowCoord > 7 or offsetColCoord < 0 or offsetColCoord > 7: break
+
+            diagonal.append(self.state[offsetRowCoord][offsetColCoord])
+            offset += 1
+
+        offset = -1
+        for i in range(8):
+            offsetRowCoord = rowCoord + (-offset if axis == "asc" else offset)
+            offsetColCoord = colCoord + offset
+            if offsetRowCoord < 0 or offsetRowCoord > 7 or offsetColCoord < 0 or offsetColCoord > 7: break
+
+            diagonal.insert(0, self.state[offsetRowCoord][offsetColCoord])
+            offset -= 1
+
+        oldPlayer = ""
+        count = 0
+        for i in range(len(diagonal)):
+            curPlayer = diagonal[i]
+            if curPlayer != " ":
+                if oldPlayer != curPlayer:
+                    oldPlayer = curPlayer
+                    count = 1
+                else:
+                    count += 1
+            if count >= 4: return True, oldPlayer
+        return False, None
+
     def inWinState(self, propagationPoint: (int, int)) -> tuple[True, str] | tuple[False, None]:
         rowCoord = propagationPoint[0]
         if rowCoord <= 0 or rowCoord > 8:
@@ -71,68 +108,10 @@ class Board:
         result, player = self.__xyAxisCheck("col", trueRowCoord, trueColCoord)
         if result: return result, player
 
-        # Ascending diagonal checks
-        # offset = 0
-        # diagonal = []
-        #
-        # # Traverse across the grid in an upwards fashion
-        # for i in range(8):
-        #     try:
-        #         curPoint = self.state[trueRowCoord - offset][trueColCoord + offset]
-        #         diagonal.append(curPoint)
-        #     except IndexError: break
-        #     offset = offset + 1
-        #
-        # offset = -1
-        # for i in range(8):
-        #     try:
-        #         curPoint = self.state[trueRowCoord - offset][trueColCoord + offset]
-        #         diagonal.insert(0, curPoint)
-        #     except IndexError: break
-        #     offset = offset - 1
-        #
-        # oldPlayer = ""
-        # count = 0
-        # for i in range(len(diagonal)):
-        #     curPlayer = diagonal[i]
-        #     if curPlayer.strip() != "":
-        #         if oldPlayer != curPlayer:
-        #             oldPlayer = curPlayer
-        #             count = 1
-        #         else:
-        #             count += 1
-        #     if count >= 4: return True, oldPlayer
-        #
-        # offset = 0
-        # diagonal = []
-        #
-        # # Traverse across the grid in a downwards fashion
-        # for i in range(8):
-        #     try:
-        #         curPoint = self.state[trueRowCoord + offset][trueColCoord + offset]
-        #         diagonal.append(curPoint)
-        #     except IndexError: break
-        #     offset = offset + 1
-        #
-        # offset = -1
-        # for i in range(8):
-        #     try:
-        #         curPoint = self.state[trueRowCoord + offset][trueColCoord + offset]
-        #         diagonal.insert(0, curPoint)
-        #     except IndexError: break
-        #     offset = offset - 1
-        #
-        # oldPlayer = ""
-        # count = 0
-        # print(diagonal)
-        # for i in range(len(diagonal)):
-        #     curPlayer = diagonal[i]
-        #     if curPlayer.strip() != "":
-        #         if oldPlayer != curPlayer:
-        #             oldPlayer = curPlayer
-        #             count = 1
-        #         else:
-        #             count += 1
-        #     if count >= 4: return True, oldPlayer
+        result, player = self.__diagonalCheck("asc", trueRowCoord, trueColCoord)
+        if result: return result, player
+
+        result, player = self.__diagonalCheck("desc", trueRowCoord, trueColCoord)
+        if result: return result, player
 
         return False, None
