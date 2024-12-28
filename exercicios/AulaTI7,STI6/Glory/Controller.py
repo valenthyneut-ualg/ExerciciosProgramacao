@@ -39,7 +39,7 @@ class Controller:
         else:
             rolls = [randrange(1, 6), randrange(1, 6)]
             rollSum = rolls[0] + rolls[1]
-            self.board.move(player, rollSum)
+            print(self.board.move(player, rollSum))
             sleep(0.5)
             print()
             print()

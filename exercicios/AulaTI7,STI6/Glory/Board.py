@@ -7,17 +7,17 @@ class Board:
         self.specialSpaces: Dict[int, tuple[str, str, int | None, str]] = {
             1:  ("b", "none",   None, ""),
 
-            8:  ("M", "move",   10,   "You got teleported to the 18th place!"),
-            15: ("B", "move",   -3,   "Backtrack 3 places."),
-            23: ("M", "move",   4,    "Move forward 4 spaces!"),
-            28: ("S", "skip",   None, "Tough luck! Skip your next turn."),
-            33: ("R", "reroll", None, "Reroll to move forward some more!"),
-            39: ("M", "move",   9,    "Move forward 9 spaces!"),
-            40: ("S", "skip",   None, "Too bad! Skip your next turn."),
-            48: ("M", "move",   -11,  "You get launched back eleven places."),
-            54: ("R", "reroll", None, "Reroll to advance some more!"),
-            56: ("M", "move",   -8,   "You get pulled back to the 48th place."),
-            63: ("D", "move",   -62,  "You died! Start from the first place."),
+            8:  ("M", "move",   10,   "És teleportado para a posição 18!"),
+            15: ("B", "move",   -3,   "Oops! És arrastado 3 posições de volta."),
+            23: ("M", "move",   4,    "Boa! Avança mais 4 posições!"),
+            28: ("S", "skip",   None, "Má sorte! Salta a tua próxima jogada."),
+            33: ("R", "reroll", None, "Atira os dados de novo para te moveres mais!"),
+            39: ("M", "move",   9,    "Altamente! Avança mais 9 posições!"),
+            40: ("S", "skip",   None, "Que pena! Salta a tua próxima jogada."),
+            48: ("M", "move",   -11,  "És lançado 11 posições de volta."),
+            54: ("R", "reroll", None, "Atira os dados de novo para avançares um pouco mais!"),
+            56: ("M", "move",   -8,   "És arrastado 8 posições de volta."),
+            63: ("D", "move",   -62,  "Morreste! Começa do início."),
 
             64: ("g", "none",   None, "")
         }
@@ -27,7 +27,15 @@ class Board:
         newPos = self.playerPositions[player] + spaces
         if newPos > 64: newPos = 64 - (newPos - 64)
 
+        message = ""
+        specialSpace = self.specialSpaces.get(newPos)
+        if specialSpace is not None:
+            if specialSpace[1] == "move":
+                newPos += specialSpace[2]
+                message = specialSpace[3]
+
         self.playerPositions[player] = newPos
+        return message
 
     def display(self):
         occupiedSpaces: list[int] = []
