@@ -24,27 +24,23 @@ class Controller:
 
     def turn(self, player: int):
         sleep(2)
-
-        print()
-        print()
+        print("\n\n")
 
         self.board.display()
-        manipulate = input(f'Jogador {player + 1}, carregue no Enter para atirar os dados. ')
-        try: manipulate = int(manipulate)
-        except ValueError: pass
 
-        if type(manipulate) == int:
-            self.board.move(player, manipulate)
-            print(f'Rodada manipulada.')
-        else:
+        try:
+            moveAmount = int(input(f'Jogador {player + 1}, carregue no Enter para atirar os dados. '))
+            print("Rodada manipulada.")
+        except ValueError:
             rolls = [randrange(1, 6), randrange(1, 6)]
             rollSum = rolls[0] + rolls[1]
-            print(self.board.move(player, rollSum))
+            moveAmount = rollSum
             sleep(0.5)
-            print()
-            print()
+            print("\n\n")
             print(f'Resultado: [{rolls[0]}][{rolls[1]}] = {rollSum}')
 
+        message = self.board.move(player, moveAmount)
+        if message: print(message)
         print(f'Jogador {player + 1}, chegou à posição {self.board.playerPositions[player]}!')
 
     def start(self):
