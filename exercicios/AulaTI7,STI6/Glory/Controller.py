@@ -7,6 +7,7 @@ class Controller:
     def __init__(self):
         self.board = Board()
         self.turnOrder = []
+        self.playerEffects = []
 
     @staticmethod
     def rollTurnOrder(playerCount: int):
@@ -28,6 +29,11 @@ class Controller:
 
         self.board.display()
 
+        if self.playerEffects[player] == "skip":
+            print(f'Jogador {player + 1}, a tua rodada é passada à frente.')
+            self.playerEffects[player] = None
+            return
+
         try:
             moveAmount = int(input(f'Jogador {player + 1}, carregue no Enter para atirar os dados. '))
             print("Rodada manipulada.")
@@ -43,6 +49,7 @@ class Controller:
 
         if effect:
             if effect == "move": self.board.move(player, effectAmount)
+            elif effect == "skip": self.playerEffects[player] = "skip"
 
             print(message)
 
@@ -50,6 +57,7 @@ class Controller:
 
     def start(self):
         self.turnOrder = self.rollTurnOrder(2)
+        self.playerEffects = [None, None]
         playerOrder = ", ".join(map(lambda x: str(x[0] + 1), self.turnOrder))
 
         print("Ordem dos jogadores:", playerOrder)
