@@ -39,8 +39,13 @@ class Controller:
             print("\n\n")
             print(f'Resultado: [{rolls[0]}][{rolls[1]}] = {rollSum}')
 
-        message = self.board.move(player, moveAmount)
-        if message: print(message)
+        effect, effectAmount, message = self.board.move(player, moveAmount)
+
+        if effect:
+            if effect == "move": self.board.move(player, effectAmount)
+
+            print(message)
+
         print(f'Jogador {player + 1}, chegou à posição {self.board.playerPositions[player]}!')
 
     def start(self):

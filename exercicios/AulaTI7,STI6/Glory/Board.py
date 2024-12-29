@@ -23,21 +23,16 @@ class Board:
         }
 
     def move(self, player: int, spaces: int):
-        if spaces < 1: raise ValueError("Invalid amount of spaces to move!")
         newPos = self.playerPositions[player] + spaces
         if newPos > 64: newPos = 64 - (newPos - 64)
-
-        # improve the way "messaging" between the Board and the Controller classes
-        # works, maybe move the effect logic to the controller
-        message = ""
-        specialSpace = self.specialSpaces.get(newPos)
-        if specialSpace is not None:
-            if specialSpace[1] == "move":
-                newPos += specialSpace[2]
-                message = specialSpace[3]
+        if newPos < 1: raise ValueError("Quantidade de espaços inválida!")
 
         self.playerPositions[player] = newPos
-        return message
+
+        specialSpace = self.specialSpaces.get(newPos)
+        if specialSpace is not None:
+            return specialSpace[1], specialSpace[2], specialSpace[3]
+        else: return None, None, None
 
     def display(self):
         occupiedSpaces: list[int] = []
