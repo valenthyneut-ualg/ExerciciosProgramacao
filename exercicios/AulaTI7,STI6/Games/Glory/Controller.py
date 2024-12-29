@@ -1,11 +1,15 @@
+from ..AbstractController import AbstractController
 from random import randrange
 from time import sleep
 
 from .Board import Board
 
-class Controller:
-    def __init__(self):
-        self.board = Board()
+class Controller(AbstractController):
+    def __init__(self, playerCount: int | None = None):
+        if playerCount is None: playerCount = 2
+        super().__init__(playerCount)
+
+        self.board = Board(playerCount)
         self.turnOrder = []
         self.playerEffects = []
 
@@ -56,8 +60,8 @@ class Controller:
         print(f'Jogador {player + 1}, chegou à posição {self.board.playerPositions[player]}!')
 
     def start(self):
-        self.turnOrder = self.rollTurnOrder(2)
-        self.playerEffects = [None, None]
+        self.turnOrder = self.rollTurnOrder(self.playerCount)
+        self.playerEffects = [None] * self.playerCount
         playerOrder = ", ".join(map(lambda x: str(x[0] + 1), self.turnOrder))
 
         print("Ordem dos jogadores:", playerOrder)

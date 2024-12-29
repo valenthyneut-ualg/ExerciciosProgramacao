@@ -1,8 +1,8 @@
 from typing import Dict
 
 class Board:
-    def __init__(self):
-        self.playerPositions: list[int] = [1, 1]
+    def __init__(self, playerCount: int):
+        self.playerPositions: list[int] = [1] * playerCount
 
         self.specialSpaces: Dict[int, tuple[str, str, int | None, str]] = {
             1:  ("b", "none",   None, ""),
