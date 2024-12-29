@@ -48,10 +48,10 @@ class Controller:
         effect, effectAmount, message = self.board.move(player, moveAmount)
 
         if effect:
+            print(message)
             if effect == "move": self.board.move(player, effectAmount)
             elif effect == "skip": self.playerEffects[player] = "skip"
-
-            print(message)
+            elif effect == "reroll": return self.turn(player)
 
         print(f'Jogador {player + 1}, chegou à posição {self.board.playerPositions[player]}!')
 

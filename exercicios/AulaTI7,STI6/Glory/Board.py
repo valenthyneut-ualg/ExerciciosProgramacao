@@ -12,7 +12,7 @@ class Board:
             23: ("M+", "move",   4,    "Boa! Avança mais 4 posições!"),
             28: ("S",  "skip",   None, "Má sorte! Salta a tua próxima jogada."),
             33: ("R",  "reroll", None, "Atira os dados de novo para te moveres mais!"),
-            39: ("M+", "move",   9,    "Altamente! Avança mais 9 posições!"),
+            39: ("M+", "move",   8,    "Altamente! Avança mais 8 posições!"),
             40: ("S",  "skip",   None, "Que pena! Salta a tua próxima jogada."),
             48: ("M-", "move",   -11,  "És lançado 11 posições de volta."),
             54: ("R",  "reroll", None, "Atira os dados de novo para avançares um pouco mais!"),
