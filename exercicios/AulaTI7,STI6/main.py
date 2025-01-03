@@ -1,8 +1,9 @@
-from Games.Glory.Controller import Controller as GloryController
+from Games.TicTacToe.Controller import Controller as TicTacToe
+from Games.Glory.Controller import Controller as Glory
 from Games.AbstractController import AbstractController
 
 if __name__ == "__main__":
-	controllers: tuple[AbstractController | None] = (None, None, GloryController(2))
+	controllers: tuple[AbstractController | None] = (TicTacToe(), None, Glory(2))
 	controller = None
 
 	while controller == None:
