@@ -7,10 +7,16 @@ class Board(AbstractBoard):
 		self.underscoreWord = ""
 		self.attempts = 10
 		self.playedLetters: list[str] = []
+		self.prefillCharacters = ["-", " ", "'", "\""]
 
 	def initWord(self, word: str):
 		self.state = word
 		self.underscoreWord = "_" * len(word)
+
+		for i in range(len(word)):
+			curChar = word[i]
+			if curChar in self.prefillCharacters:
+				self.underscoreWord = self.underscoreWord[:i] + curChar + self.underscoreWord[i + 1:]
 
 	def play(self, letter: str = "") -> int:
 		if letter in self.playedLetters: return 0

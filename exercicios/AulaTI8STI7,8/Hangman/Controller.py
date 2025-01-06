@@ -24,13 +24,16 @@ class Controller(AbstractController):
 			if state == 0: print("Já tentou adivinhar essa letra!")
 			elif state == 1: print(f'A palavra contém a letra {letter}!')
 			elif state == 2: print(f'A palavra não contém a letra {letter}!')
+			print()
 
 	def start(self):
-		word = None
-		while word is None:
-			temp = input("Insire uma palavra para começar o jogo: ")
-			if temp.isalpha(): word = temp
-			else: print("A palavra só pode conter caractéres do alfabeto!")
+		word = input("Insira uma palavra para começar o jogo: ")
+		for char in word:
+			isValid = char.isalpha() or char in cast(Board, self.board).prefillCharacters
+			if not isValid:
+				print("A palavra só pode conter caractéres alfabéticos!")
+				self.start()
+				break
 
 		cast(Board, self.board).initWord(word)
 
