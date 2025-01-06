@@ -34,3 +34,8 @@
 #              quebrar repetir
 #            senão
 #              escrever "Ups! Adivinhou incorretamente. Tem {tentativas} tentativas."
+
+from Hangman.Controller import Controller
+
+if __name__ == '__main__':
+	Controller().start()
