@@ -1,3 +1,5 @@
+from json import loads
+
 from AbstractGame.AbstractController import AbstractController
 from AbstractGame.Player import Player
 from .Board import Board
@@ -49,3 +51,36 @@ class Controller(AbstractController):
 			print(error)
 
 		return "ongoing", None
+
+	def serialize(self):
+		return {
+			"playerCount": self.playerCount,
+			"playerTurn": self.playerTurn,
+			"lastPlayedCoords": self.lastPlayedCoords
+		}
+
+	@staticmethod
+	def deserialize(rawData: str, players: list[Player] = None):
+		try:
+			parsedData = loads(rawData)
+
+			hasValidPlayerCount = hasattr(parsedData, "playerCount") and parsedData.playerCount is int
+			hasValidPlayerTurn = hasattr(parsedData, "playerTurn") and parsedData.playerTurn is int
+			hasValidLastPlayedCoords = hasattr(parsedData, "lastPlayedCoords") and parsedData.lastPlayedCoords is tuple[int, int]
+
+			if hasValidPlayerCount and hasValidPlayerTurn and hasValidLastPlayedCoords:
+				if parsedData.playerCount != len(players):
+					raise ValueError("Nº de jogadores não coincidem!")
+
+				controller = Controller(players)
+
+				controller.playerCount = parsedData.playerCount
+				controller.playerTurn = parsedData.playerTurn
+				controller.curPlayer = players[controller.playerTurn]
+				controller.lastPlayedCoords = parsedData.lastPlayedCoords
+		except AttributeError as error:
+			print("Ocorreu um erro a ler um save do jogo!")
+			print(error)
+		except ValueError as error:
+			print("Ocorreu um erro a preparar o jogo!")
+			print(error)
