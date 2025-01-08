@@ -1,6 +1,7 @@
 from AbstractGame.AbstractController import AbstractController
 from .Board import Board
-from typing import cast
+from typing import cast, Dict, Any
+
 
 class Controller(AbstractController):
 	def __init__(self):
@@ -44,3 +45,10 @@ class Controller(AbstractController):
 
 		if result == "win": print(f'Ganhou! A palavra era "{self.board.state}".')
 		elif result == "loss": print(f'Perdeu... A palavra era "{self.board.state}".')
+
+	def serialize(self) -> Dict[str, Any]:
+		pass
+
+	@staticmethod
+	def deserialize(rawData: str, players = None):
+		return Controller()

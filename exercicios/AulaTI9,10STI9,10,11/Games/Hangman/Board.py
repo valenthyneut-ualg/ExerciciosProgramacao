@@ -1,5 +1,8 @@
+from json import loads
+
 from AbstractGame.AbstractBoard import AbstractBoard
-from typing import cast
+from typing import cast, Dict, Any
+
 
 class Board(AbstractBoard):
 	def __init__(self):
@@ -44,3 +47,32 @@ class Board(AbstractBoard):
 
 	def __str__(self):
 		return self.underscoreWord + f'\nErros restantes: {self.attempts}'
+
+	def serialize(self) -> Dict[str, Any]:
+		return {
+			"state": self.state,
+			"underscoreWord": self.underscoreWord,
+			"attempts": self.attempts,
+			"playedLetters": self.playedLetters
+		}
+
+	@staticmethod
+	def deserialize(rawData: str, players = None):
+		try:
+			parsedData = loads(rawData)
+
+			hasValidState = hasattr(parsedData, "state") and parsedData.state is str
+			hasValidUnderscoreWord = hasattr(parsedData, "underscoreWord") and parsedData.underscoreWord is str
+			hasValidAttempts = hasattr(parsedData, "attempts") and parsedData.attempts is int
+			hasValidPlayedLetters = hasattr(parsedData, "playedLetters") and parsedData.playedLetters is list[str]
+
+			if hasValidState and hasValidUnderscoreWord and hasValidAttempts and hasValidPlayedLetters:
+				board = Board()
+
+				board.state = parsedData.state
+				board.underscoreWord = parsedData.underscoreWord
+				board.attempts = parsedData.attempts
+				board.playedLetters = parsedData.playedLetters
+		except AttributeError as error:
+			print("Ocorreu um erro a ler um save do jogo!")
+			print(error)
