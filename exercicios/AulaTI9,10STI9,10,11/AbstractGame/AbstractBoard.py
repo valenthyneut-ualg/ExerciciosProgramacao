@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from .Player import Player
+from typing import Dict, Any
 
 class AbstractBoard(ABC):
 	def __init__(self, state, players: list[Player]):
@@ -14,3 +15,9 @@ class AbstractBoard(ABC):
 
 	@abstractmethod
 	def __str__(self): pass
+
+	@abstractmethod
+	def serialize(self) -> Dict[str, Any]: pass
+
+	@abstractmethod
+	def deserialize(self, rawData: str): pass

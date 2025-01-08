@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from .AbstractBoard import AbstractBoard
+from typing import Dict, Any
 
 class AbstractController(ABC):
 	def __init__(self, title: str, board: AbstractBoard, playerCount: int, minPlayerCount: int):
@@ -16,3 +17,9 @@ class AbstractController(ABC):
 
 	@abstractmethod
 	def turn(self): pass
+
+	@abstractmethod
+	def serialize(self) -> Dict[str, Any]: pass
+
+	@abstractmethod
+	def deserialize(self, rawData: str): pass

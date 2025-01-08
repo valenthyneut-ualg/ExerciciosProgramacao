@@ -6,6 +6,31 @@ from Games.FourInARow.Controller import Controller as FourInARow
 from Games.Glory.Controller import Controller as Glory
 from Games.Hangman.Controller import Controller as Hangman
 
+from pynput import keyboard
+
+game: AbstractController | None = None
+pressedCtrl = False
+
+def save():
+	global game
+
+	print("\nA guardar...")
+
+
+
+def checkSaveInput(key: keyboard.Key | keyboard.KeyCode | None):
+	global pressedCtrl
+
+	try:
+		if hasattr(key, "ctrl") and key.ctrl:
+			pressedCtrl = True
+			return
+		elif key.char == "s":
+			save()
+
+		pressedCtrl = False
+	except AttributeError: pass
+
 if __name__ == "__main__":
 	print("Insira o número de jogadores.")
 	print("(Atenção, alguns jogos têm um número de jogadores fixo.)")
@@ -39,7 +64,6 @@ if __name__ == "__main__":
 		print()
 
 	games = [TicTacToe(players), FourInARow(players), Glory(players), Hangman()]
-	game: AbstractController | None = None
 
 	while game is None:
 		print("Escolha um jogo dos seguintes.")
@@ -53,4 +77,9 @@ if __name__ == "__main__":
 			print("Só pode selecionar um jogo da lista!")
 
 	print()
+
+	listener = keyboard.Listener(on_press=checkSaveInput)
+	listener.start()
+	print("Carregue na combinação CTRL+S para guardar e sair do jogo.\n")
+
 	game.start()
