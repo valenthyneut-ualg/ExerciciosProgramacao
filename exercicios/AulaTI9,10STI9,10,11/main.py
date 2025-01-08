@@ -1,3 +1,6 @@
+from json import dumps
+import os
+
 from AbstractGame.Player import Player
 from AbstractGame.AbstractController import AbstractController
 
@@ -8,15 +11,34 @@ from Games.Hangman.Controller import Controller as Hangman
 
 from pynput import keyboard
 
+listener: keyboard.Listener | None = None
+players: list[Player] | None = None
 game: AbstractController | None = None
 pressedCtrl = False
 
 def save():
-	global game
+	global game, players
 
 	print("\nA guardar...")
 
+	controllerData = game.serialize()
+	boardData = game.board.serialize()
+	playerData = [player.serialize() for player in players]
 
+	saveData = dumps({
+		"game": game.title,
+		"players": playerData,
+		"board": boardData,
+		"controller": controllerData
+	}, indent=4)
+
+	with open("save.json", "w") as saveFile:
+		saveFile.writelines(saveData)
+	saveFile.close()
+
+	print("Jogo guardado.")
+	listener.stop()
+	os._exit(0)
 
 def checkSaveInput(key: keyboard.Key | keyboard.KeyCode | None):
 	global pressedCtrl
