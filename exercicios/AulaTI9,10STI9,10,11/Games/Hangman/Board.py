@@ -73,6 +73,7 @@ class Board(AbstractBoard):
 				board.underscoreWord = parsedData.underscoreWord
 				board.attempts = parsedData.attempts
 				board.playedLetters = parsedData.playedLetters
+				return board
 		except AttributeError as error:
 			print("Ocorreu um erro a ler um save do jogo!")
 			print(error)

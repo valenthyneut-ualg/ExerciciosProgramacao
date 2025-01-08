@@ -49,6 +49,7 @@ class Board(AbstractBoard):
 			if hasValidState:
 				board = Board(players)
 				board.state = parsedData.state
+				return board
 		except AttributeError as error:
 			print("Ocorreu um erro a ler um jogo!")
 			print(error)

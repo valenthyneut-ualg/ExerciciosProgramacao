@@ -106,6 +106,7 @@ class Controller(AbstractController):
 				controller.playerTurn = parsedData.playerTurn
 				controller.curPlayer = players[controller.turnOrder[controller.playerTurn]]
 				controller.playerEffects = parsedData.playerEffects
+				return controller
 		except AttributeError as error:
 			print("Ocorreu um erro a ler um save do jogo!")
 			print(error)

@@ -72,7 +72,7 @@ class Controller(AbstractController):
 			hasValidPlayerTurn = hasattr(parsedData, "playerTurn") and parsedData.playerTurn is int
 
 			if hasValidPlayerCount and hasValidPlayerTurn:
-				if parsedData.playerCount != len(players)
+				if parsedData.playerCount != len(players):
 					raise ValueError("Nº de jogadores não coincidem!")
 
 				controller = Controller(players)
