@@ -5,7 +5,7 @@ from typing import cast
 
 class Controller(AbstractController):
 	def __init__(self, players: list[Player]):
-		super().__init__("Quatro em linha", Board(players), 2)
+		super().__init__("Quatro em linha", Board(players), 2, 2)
 		self.curPlayer = players[0]
 		self.playerTurn = 0
 		self.lastPlayedCoords: tuple[int, int] = (1, 1)

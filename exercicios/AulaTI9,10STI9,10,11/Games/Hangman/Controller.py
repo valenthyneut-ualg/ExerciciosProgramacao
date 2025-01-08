@@ -4,7 +4,7 @@ from typing import cast
 
 class Controller(AbstractController):
 	def __init__(self):
-		super().__init__("Jogo da forca", Board(), 1)
+		super().__init__("Jogo da forca", Board(), 1, 1)
 
 	def turn(self) -> str:
 		print(self.board)

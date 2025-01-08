@@ -7,7 +7,7 @@ from time import sleep
 
 class Controller(AbstractController):
 	def __init__(self, players: list[Player]):
-		super().__init__("Jogo da glória", Board(players), len(players))
+		super().__init__("Jogo da glória", Board(players), len(players), 2)
 
 		self.turnOrder: list[int] = []
 		while len(self.turnOrder) != len(players):
