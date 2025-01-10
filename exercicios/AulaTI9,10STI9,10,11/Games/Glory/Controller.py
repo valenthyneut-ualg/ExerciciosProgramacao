@@ -1,9 +1,7 @@
-from json import loads
-
 from AbstractGame.AbstractController import AbstractController
 from AbstractGame.Player import Player
 from .Board import Board
-from typing import cast
+from typing import cast, Dict, Any
 from random import choice, randrange
 from time import sleep
 
@@ -77,39 +75,9 @@ class Controller(AbstractController):
 
 		return "ongoing", None
 
-	def serialize(self):
-		return {
-			"turnOrder": self.turnOrder,
-			"playerCount": self.playerCount,
-			"playerTurn": self.playerTurn,
-			"playerEffects": self.playerEffects
-		}
+	def serialize(self) -> Dict[str, Any]:
+		return {"turnOrder": self.turnOrder, "playerTurn": self.playerTurn, "playerEffects": self.playerEffects}
 
-	@staticmethod
-	def deserialize(rawData: str, players: list[Player] = None):
-		try:
-			parsedData = loads(rawData)
-
-			hasValidTurnOrder = hasattr(parsedData, "turnOrder") and parsedData.turnOrder is list[int]
-			hasValidPlayerCount = hasattr(parsedData, "playerCount") and parsedData.playerCount is int
-			hasValidPlayerTurn = hasattr(parsedData, "playerTurn") and parsedData.playerTurn is int
-			hasValidPlayerEffects = hasattr(parsedData, "playerEffects") and parsedData.playerEffects is list[str | None]
-
-			if hasValidTurnOrder and hasValidPlayerCount and hasValidPlayerTurn and hasValidPlayerEffects:
-				if parsedData.playerCount != len(players):
-					raise ValueError("Nº de jogadores não coincidem!")
-
-				controller = Controller(players)
-
-				controller.turnOrder = parsedData.playerTurn
-				controller.playerCount = parsedData.playerCount
-				controller.playerTurn = parsedData.playerTurn
-				controller.curPlayer = players[controller.turnOrder[controller.playerTurn]]
-				controller.playerEffects = parsedData.playerEffects
-				return controller
-		except AttributeError as error:
-			print("Ocorreu um erro a ler um save do jogo!")
-			print(error)
-		except ValueError as error:
-			print("Ocorreu um erro a preparar o jogo!")
-			print(error)
+	def deserialize(self, data: Dict[str, Any]) -> None:
+		super().deserialize(data)
+		self.curPlayer = self.board.players[self.playerTurn]

@@ -2,9 +2,8 @@ from AbstractGame.AbstractController import AbstractController
 from .Board import Board
 from typing import cast, Dict, Any
 
-
 class Controller(AbstractController):
-	def __init__(self):
+	def __init__(self, players = None):
 		super().__init__("Jogo da forca", Board(), 1, 1)
 
 	def turn(self) -> str:
@@ -30,15 +29,16 @@ class Controller(AbstractController):
 		return "ongoing"
 
 	def start(self):
-		word = input("Insira uma palavra para começar o jogo: ")
-		for char in word:
-			isValid = char.isalpha() or char in cast(Board, self.board).prefillCharacters
-			if not isValid:
-				print("A palavra só pode conter caractéres alfabéticos!")
-				self.start()
-				break
+		if len(cast(Board, self.board).state) == 0:
+			word = input("Insira uma palavra para começar o jogo: ")
+			for char in word:
+				isValid = char.isalpha() or char in cast(Board, self.board).prefillCharacters
+				if not isValid:
+					print("A palavra só pode conter caractéres alfabéticos!")
+					self.start()
+					break
 
-		cast(Board, self.board).initWord(word)
+			cast(Board, self.board).initWord(word)
 
 		result = "ongoing"
 		while result == "ongoing": result = self.turn()
@@ -47,8 +47,4 @@ class Controller(AbstractController):
 		elif result == "loss": print(f'Perdeu... A palavra era "{self.board.state}".')
 
 	def serialize(self) -> Dict[str, Any]:
-		pass
-
-	@staticmethod
-	def deserialize(rawData: str, players = None):
-		return Controller()
+		return {}

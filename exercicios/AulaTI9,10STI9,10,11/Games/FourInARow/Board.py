@@ -1,4 +1,4 @@
-from json import loads
+from typing import Dict, Any
 
 from AbstractGame.AbstractBoard import AbstractBoard
 from AbstractGame.Player import Player
@@ -110,20 +110,5 @@ class Board(AbstractBoard):
 		for i in range(8): boardString += f' {i + 1}  '
 		return boardString
 
-	def serialize(self):
+	def serialize(self) -> Dict[str, Any]:
 		return {"state": self.state}
-
-	@staticmethod
-	def deserialize(rawData: str, players: list[Player] = None):
-		try:
-			parsedData = loads(rawData)
-
-			hasValidState = hasattr(parsedData, "state") and parsedData.state is list[int]
-
-			if hasValidState:
-				board = Board(players)
-				board.state = parsedData.state
-				return board
-		except AttributeError as error:
-			print("Ocorreu um erro a ler um jogo!")
-			print(error)
