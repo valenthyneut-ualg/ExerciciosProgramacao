@@ -93,7 +93,7 @@ def setupPlayersByUserInput():
 				symbol = str(i + 1)
 				print("Símbolo duplicado. Será utilizado o número do jogador.")
 
-			players.append(Player(name, symbol, 0))
+			players.append(Player(name, symbol, {}, 0))
 			takenSymbols.append(symbol)
 			symbolDone = True
 			print()
@@ -175,12 +175,25 @@ def main():
 
 			if listener is None: setupListener()
 			winner = game.start()
-			game = None
 
 			print()
 			for player in players:
-				if player.name == winner.name: player.score += 1
-				print(f'{player.name} tem {player.score} pontos.')
+				curScore = player.score.get(game.title)
+				if curScore is None: curScore = 0
+				player.score[game.title] = curScore
+
+				if player.name == winner.name:
+					player.score[game.title] += 1
+
+					totalScore = 0
+					for key in player.score.keys(): totalScore += player.score[key]
+					player.totalScore = totalScore
+
+				sum = 0
+				for key in player.score.keys(): sum += player.score[key]
+				print(f'O jogador {player.name} tem {player.score[game.title]} pontos no jogo {game.title}, com {player.totalScore} no total.')
+
+			game = None
 	except KeyboardInterrupt:
 		save()
 

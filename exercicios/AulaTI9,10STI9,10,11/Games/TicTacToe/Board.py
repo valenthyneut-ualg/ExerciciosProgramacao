@@ -12,7 +12,7 @@ class Board(AbstractBoard):
 			[0, 4, 8], [2, 4, 6]
 		]
 
-	def play(self, player: Player = Player("", "", 0), linePosition: int = 1, columnPosition: int = 1):
+	def play(self, player: Player = Player("", "", {}, 0), linePosition: int = 1, columnPosition: int = 1):
 		oneDimensionPosition = (3 * (linePosition - 1) + columnPosition) - 1
 		if self.state[oneDimensionPosition] == " ": self.state[oneDimensionPosition] = player.symbol
 		else: raise ValueError("Essa posição já foi ocupada!")

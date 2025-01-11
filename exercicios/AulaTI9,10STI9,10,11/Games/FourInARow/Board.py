@@ -61,7 +61,7 @@ class Board(AbstractBoard):
 
 		return self.__fourInARowCheck(diagonal)
 
-	def play(self, player: Player = Player("", "",  0), column: int = 1) -> tuple[int, int]:
+	def play(self, player: Player = Player("", "",  {}, 0), column: int = 1) -> tuple[int, int]:
 		if column <= 0 or column > 8: raise ValueError("Número da coluna tem de ser entre 1 e 8 inclusivo.")
 		zeroIndexColumn = column - 1
 

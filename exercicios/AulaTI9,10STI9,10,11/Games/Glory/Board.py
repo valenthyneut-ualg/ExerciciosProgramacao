@@ -25,7 +25,7 @@ class Board(AbstractBoard):
 			64: ("g", "none", None, "")
 		}
 
-	def play(self, player: Player = Player("", "", 0), spaces: int = 0) -> tuple[str, int | None, str] | None:
+	def play(self, player: Player = Player("", "", {}, 0), spaces: int = 0) -> tuple[str, int | None, str] | None:
 		try: playerIndex = self.players.index(player)
 		except ValueError: raise ValueError("Jogador não presente na lista de jogadores!")
 		# make the error a little more specific
