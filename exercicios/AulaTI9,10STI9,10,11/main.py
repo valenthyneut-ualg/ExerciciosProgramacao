@@ -28,12 +28,15 @@ def save():
 	print()
 
 	playerData = [player.serialize() for player in players]
-	gameData = {
-		game.title: {
-			"controllerData": game.serialize(),
-			"boardData": game.board.serialize()
+	if game is None:
+		gameData = {}
+	else:
+		gameData = {
+			game.title: {
+				"controllerData": game.serialize(),
+				"boardData": game.board.serialize()
+			}
 		}
-	}
 
 	if exists("save.json"):
 		with open("save.json", "r") as saveFile:
@@ -41,7 +44,7 @@ def save():
 			existingGameData: Dict | None = existingSaveData.get("gameData")
 			if existingGameData is not None:
 				for title in existingGameData.keys():
-					if title != game.title:
+					if game is None or title != game.title:
 						gameData[title] = existingGameData.get(title)
 
 	saveData = dumps({
@@ -50,7 +53,7 @@ def save():
 	}, indent=4)
 
 	with open("save.json", "w") as saveFile: saveFile.writelines(saveData)
-	print("Jogo guardado.")
+	print("Estado guardado.")
 
 	_exit(0)
 
@@ -90,7 +93,7 @@ def setupPlayersByUserInput():
 				symbol = str(i + 1)
 				print("Símbolo duplicado. Será utilizado o número do jogador.")
 
-			players.append(Player(name, symbol))
+			players.append(Player(name, symbol, 0))
 			takenSymbols.append(symbol)
 			symbolDone = True
 			print()
@@ -100,7 +103,7 @@ def setupPlayersFromSave(saveData: Dict):
 
 	savePlayers = saveData.get("players")
 	for player in savePlayers:
-		players.append(Player(player.get("name"), player.get("symbol")))
+		players.append(Player(player.get("name"), player.get("symbol"), player.get("score")))
 
 def pickGame():
 	global game, players
@@ -147,29 +150,37 @@ def main():
 	else:
 		setupPlayersByUserInput()
 
-	pickGame()
+	try:
+		while True:
+			pickGame()
 
-	if saveData is not None:
-		gameData: Dict = saveData.get("gameData")
-		gameSaveData: Dict = gameData.get(game.title)
-		if gameSaveData is not None:
-			print("\nQuer continuar a sessão deste jogo? Y/n")
-			answer = input("> ").lower()
+			if saveData is not None:
+				gameData: Dict = saveData.get("gameData")
+				gameSaveData: Dict = gameData.get(game.title)
+				if gameSaveData is not None:
+					print("\nQuer continuar a sessão deste jogo? Y/n")
+					answer = input("> ").lower()
+
+					print()
+					if answer == "y" or answer == "yes" or answer == "sim":
+						print("A continuar da sessão anterior..")
+						game.deserialize(gameSaveData.get("controllerData"))
+						game.board.deserialize(gameSaveData.get("boardData"))
+					else:
+						print("A iniciar uma nova sessão..")
+						gameData.pop(game.title)
+						saveData["gameData"] = gameData
+						with open("save.json", "w") as saveFile:
+							saveFile.writelines(dumps(saveData, indent=4))
+
+			if listener is None: setupListener()
+			winner = game.start()
+			game = None
 
 			print()
-			if answer == "y" or answer == "yes" or answer == "sim":
-				print("A continuar da sessão anterior..")
-				game.deserialize(gameSaveData.get("controllerData"))
-				game.board.deserialize(gameSaveData.get("boardData"))
-			else:
-				print("A iniciar uma nova sessão..")
-				gameData.pop(game.title)
-				saveData["gameData"] = gameData
-				with open("save.json", "w") as saveFile: saveFile.writelines(dumps(saveData, indent=4))
-
-	try:
-		setupListener()
-		game.start()
+			for player in players:
+				if player.name == winner.name: player.score += 1
+				print(f'{player.name} tem {player.score} pontos.')
 	except KeyboardInterrupt:
 		save()
 

@@ -1,10 +1,10 @@
 from AbstractGame.AbstractBoard import AbstractBoard
 from typing import cast, Dict, Any
-
+from AbstractGame.Player import Player
 
 class Board(AbstractBoard):
-	def __init__(self):
-		super().__init__("", [])
+	def __init__(self, players: list[Player]):
+		super().__init__("", players)
 		self.underscoreWord = ""
 		self.attempts = 10
 		self.playedLetters: list[str] = []

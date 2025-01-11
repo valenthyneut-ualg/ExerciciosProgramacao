@@ -55,6 +55,8 @@ class Controller(AbstractController):
 		if result[0] == "draw": print("Empate!")
 		elif result[0] == "win": print(f'O jogador "{result[1]}" ganhou!')
 
+		return result[1]
+
 	def serialize(self) -> Dict[str, Any]:
 		return {"playerTurn": self.playerTurn}
 

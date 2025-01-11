@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from .AbstractBoard import AbstractBoard
+from .Player import Player
 from .Serializable import Serializable
 
 class AbstractController(Serializable):
@@ -13,7 +14,7 @@ class AbstractController(Serializable):
 			raise ValueError(f'Este jogo necessita de pelo menos {minPlayerCount} jogadores.')
 
 	@abstractmethod
-	def start(self): pass
+	def start(self) -> Player: pass
 
 	@abstractmethod
 	def turn(self): pass

@@ -1,10 +1,11 @@
 from AbstractGame.AbstractController import AbstractController
+from AbstractGame.Player import Player
 from .Board import Board
 from typing import cast, Dict, Any
 
 class Controller(AbstractController):
-	def __init__(self, players = None):
-		super().__init__("Jogo da forca", Board(), 1, 1)
+	def __init__(self, players: list[Player]):
+		super().__init__("Jogo da forca", Board(players), 2, 2)
 
 	def turn(self) -> str:
 		print(self.board)
@@ -14,7 +15,7 @@ class Controller(AbstractController):
 		if cast(Board, self.board).attempts <= 0: return "loss"
 
 		print()
-		letter = input("Insira uma letra para adivinhar: ")
+		letter = input(f'{self.board.players[1].name}, insira uma letra para adivinhar: ')
 
 		print()
 		if len(letter) != 1: print("Só pode tentar adivinhar uma letra de cada vez!")
@@ -30,7 +31,7 @@ class Controller(AbstractController):
 
 	def start(self):
 		if len(cast(Board, self.board).state) == 0:
-			word = input("Insira uma palavra para começar o jogo: ")
+			word = input(f'{self.board.players[0].name}, insira uma palavra para começar o jogo: ')
 			for char in word:
 				isValid = char.isalpha() or char in cast(Board, self.board).prefillCharacters
 				if not isValid:
@@ -43,8 +44,11 @@ class Controller(AbstractController):
 		result = "ongoing"
 		while result == "ongoing": result = self.turn()
 
-		if result == "win": print(f'Ganhou! A palavra era "{self.board.state}".')
-		elif result == "loss": print(f'Perdeu... A palavra era "{self.board.state}".')
+		if result == "win": winner = self.board.players[1]
+		else: winner = self.board.players[0]
+
+		print(f'A palavra era "{self.board.state}". O jogador "{winner.name}" ganhou!')
+		return winner
 
 	def serialize(self) -> Dict[str, Any]:
 		return {}

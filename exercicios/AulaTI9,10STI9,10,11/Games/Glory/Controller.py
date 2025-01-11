@@ -39,6 +39,8 @@ class Controller(AbstractController):
 		print()
 		if result[0] == "win": print(f'O jogador "{result[1]}" ganhou!')
 
+		return result[1]
+
 	def turn(self) -> tuple[str, Player] | tuple[str, None]:
 		sleep(2)
 		print("\n\n")
