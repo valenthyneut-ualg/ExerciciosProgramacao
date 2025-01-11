@@ -1,6 +1,5 @@
-import os
 from json import loads, dumps
-from os import remove
+from os import remove, _exit
 from os.path import exists
 from typing import Dict
 from AbstractGame.AbstractController import AbstractController
@@ -53,7 +52,7 @@ def save():
 	with open("save.json", "w") as saveFile: saveFile.writelines(saveData)
 	print("Jogo guardado.")
 
-	os._exit(0)
+	_exit(0)
 
 def setupPlayersByUserInput():
 	global players
@@ -135,12 +134,12 @@ def main():
 
 		print()
 		if answer == "y" or answer == "yes" or answer == "sim":
-			print("A continuar a prévia sessão de jogos..\n")
+			print("A continuar a prévia sessão de jogos..")
 			with open("save.json", "r") as saveFile:
 				saveData = loads("".join(saveFile.readlines()))
 			setupPlayersFromSave(saveData)
 		elif answer == "n" or answer == "no" or answer == "não" or answer == "nao":
-			print("A iniciar uma nova sessão de jogos..\n")
+			print("A iniciar uma nova sessão de jogos..")
 			remove("save.json")
 			setupPlayersByUserInput()
 		else:
@@ -151,21 +150,28 @@ def main():
 	pickGame()
 
 	if saveData is not None:
-		gameSaveData: Dict = saveData.get("gameData").get(game.title)
+		gameData: Dict = saveData.get("gameData")
+		gameSaveData: Dict = gameData.get(game.title)
 		if gameSaveData is not None:
-			print("Quer continuar a sessão deste jogo? Y/n")
+			print("\nQuer continuar a sessão deste jogo? Y/n")
 			answer = input("> ").lower()
 
 			print()
 			if answer == "y" or answer == "yes" or answer == "sim":
-				print("A continuar da sessão anterior..\n")
+				print("A continuar da sessão anterior..")
 				game.deserialize(gameSaveData.get("controllerData"))
 				game.board.deserialize(gameSaveData.get("boardData"))
 			else:
-				print("A iniciar uma nova sessão..\n")
+				print("A iniciar uma nova sessão..")
+				gameData.pop(game.title)
+				saveData["gameData"] = gameData
+				with open("save.json", "w") as saveFile: saveFile.writelines(dumps(saveData, indent=4))
 
-	setupListener()
-	game.start()
+	try:
+		setupListener()
+		game.start()
+	except KeyboardInterrupt:
+		save()
 
 if __name__ == "__main__":
 	main()
