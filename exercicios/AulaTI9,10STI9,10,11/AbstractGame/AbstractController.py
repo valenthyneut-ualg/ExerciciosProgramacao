@@ -6,7 +6,7 @@ from .Serializable import Serializable
 
 
 class AbstractController(Serializable):
-	def __init__(self, board: AbstractBoard, players: list[Player], min_player_count: int):
+	def __init__(self, board: AbstractBoard, players: tuple[Player], min_player_count: int):
 		self.board = board
 		self.players = players
 		self.player_count = len(players)
