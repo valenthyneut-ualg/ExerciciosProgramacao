@@ -173,6 +173,7 @@ def main():
 		elif answer in ("n", "no", "nao", "não"):
 			print("A iniciar uma nova sessão de jogos..")
 			remove(SAVEFILE_PATH)
+			get_players_from_input()
 		else:
 			print("Resposta inválida. O programa irá parar.")
 	else:
