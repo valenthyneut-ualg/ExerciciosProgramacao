@@ -16,7 +16,7 @@ class Board(AbstractBoard):
 
 		super().__init__(players)
 		self.grid_size = grid_size
-		self.grid = [[self.SYMBOLS["unknown"] * self.grid_size for _ in range(grid_size)]]
+		self.grid = [[self.SYMBOLS["unknown"]] * self.grid_size for _ in range(self.grid_size)]
 		self.mine_pos: set[tuple[int, int]] = set()
 		self.flag_pos: set[tuple[int, int]] = set()
 		self.hit_mines = False
@@ -72,7 +72,7 @@ class Board(AbstractBoard):
 			random_pos = (randint(0, self.grid_size - 1), randint(0, self.grid_size - 1))
 			if random_pos not in self.mine_pos and random_pos != starting_pos: self.mine_pos.add(random_pos)
 
-	def play(self, player: Player = None, pos: tuple[int, int] = (0, 0), flagged: bool = False) -> Literal["flagged", "unflagged", "hit_mine", "ongoing"]:
+	def play(self, pos: tuple[int, int] = (0, 0), flagged: bool = False) -> Literal["flagged", "unflagged", "hit_mine", "ongoing"]:
 		pos_x, pos_y = pos
 		if pos_x not in range(0, self.grid_size):
 			raise ValueError(f'A posição X tem de estar entre 0 e {self.grid_size}, inclusivo.')
@@ -100,9 +100,14 @@ class Board(AbstractBoard):
 		self.bfsUpdate(pos)
 		return "ongoing"
 
-	def current_state(self) -> str:
+	def current_state(self) -> Literal["win", "loss", "ongoing"]:
+		unknown_count = 0
+		for i in range(0, self.grid_size):
+			for j in range(0, self.grid_size):
+				if self.grid[i][j] == self.SYMBOLS["unknown"]: unknown_count += 1
+
 		if self.hit_mines: return "loss"
-		elif self.flag_pos == self.mine_pos: return "win"
+		elif self.flag_pos == self.mine_pos and unknown_count == 0: return "win"
 		else: return "ongoing"
 
 	def __str__(self) -> str:

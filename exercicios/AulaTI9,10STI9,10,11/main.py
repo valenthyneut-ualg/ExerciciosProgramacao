@@ -5,6 +5,7 @@ from Games.TicTacToe.Controller import Controller as TicTacToe
 from Games.FourInARow.Controller import Controller as FourInARow
 from Games.Glory.Controller import Controller as Glory
 from Games.Hangman.Controller import Controller as Hangman
+from Games.Minesweeper.Controller import Controller as Minesweeper
 
 # Global variables
 GAME: GameSpecification | None = None
@@ -12,7 +13,8 @@ GAMES: list[GameSpecification] = [
 	{ "title": "Jogo do galo", "min_player_count": 2, "controller": TicTacToe },
 	{ "title": "Quatro em linha", "min_player_count": 2, "controller": FourInARow },
 	{ "title": "Jogo da glória", "min_player_count": 2, "controller": Glory },
-	{ "title": "Jogo da forca", "min_player_count": 1, "controller": Hangman }
+	{ "title": "Jogo da forca", "min_player_count": 1, "controller": Hangman },
+	{ "title": "Campo de minas", "min_player_count": 1, "controller": Minesweeper }
 ]
 PLAYERS: tuple[Player] | None
 
