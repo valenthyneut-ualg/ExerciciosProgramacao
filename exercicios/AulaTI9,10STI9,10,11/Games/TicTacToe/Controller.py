@@ -5,7 +5,7 @@ from AbstractGame.Player import Player
 from Games.TicTacToe.Board import Board
 
 class Controller(AbstractController):
-	def __init__(self, players: tuple[Player]):
+	def __init__(self, players: tuple[Player, ...]):
 		players = players[0:2]
 		super().__init__(Board(players), players, 2)
 

@@ -6,7 +6,7 @@ from AbstractGame.Serializable import Serializable
 
 
 class AbstractBoard(Serializable):
-	def __init__(self, players: tuple[Player]):
+	def __init__(self, players: tuple[Player, ...]):
 		self.players = players
 
 	@abstractmethod

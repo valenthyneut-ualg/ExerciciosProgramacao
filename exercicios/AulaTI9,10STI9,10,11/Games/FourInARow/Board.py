@@ -5,7 +5,7 @@ from AbstractGame.Player import Player
 
 
 class Board(AbstractBoard):
-	def __init__(self, players: tuple[Player]):
+	def __init__(self, players: tuple[Player, ...]):
 		self.XY_AXES = ("row", "col")
 		self.DIAG_AXES = ("asc", "desc")
 

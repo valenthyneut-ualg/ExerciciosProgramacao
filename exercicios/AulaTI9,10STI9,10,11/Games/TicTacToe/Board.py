@@ -5,7 +5,7 @@ from AbstractGame.Player import Player
 
 
 class Board(AbstractBoard):
-	def __init__(self, players: tuple[Player]):
+	def __init__(self, players: tuple[Player, ...]):
 		self.WINSTATES = (
 			(0, 1, 2), (3, 4, 5), (6, 7, 8),
 			(0, 3, 6), (1, 4, 7), (2, 5, 8),
