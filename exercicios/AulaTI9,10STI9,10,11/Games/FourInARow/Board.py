@@ -11,7 +11,7 @@ class Board(AbstractBoard):
 
 		super().__init__(players)
 		self.grid = [[" "] * 8 for _ in range(8)]
-		self.last_played_pos = None
+		self.last_played_pos = (0, 0)
 
 	def __four_in_a_row_check(self, cut: list[str]) -> Player | None:
 		old_player = ""
@@ -114,7 +114,7 @@ class Board(AbstractBoard):
 
 				if i != rowLength - 1: rowString += "|"
 			boardString += rowString + "\n"
-		for i in range(8): boardString += f' {i + 1}  '
+		for i in range(8): boardString += f' {i}  '
 		return boardString
 
 	def serialize(self) -> Dict[str, Any]:

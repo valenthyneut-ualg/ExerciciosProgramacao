@@ -2,11 +2,13 @@ from AbstractGame.GameSpecification import GameSpecification
 from AbstractGame.Player import Player
 
 from Games.TicTacToe.Controller import Controller as TicTacToe
+from Games.FourInARow.Controller import Controller as FourInARow
 
 # Global variables
 GAME: GameSpecification | None = None
 GAMES: list[GameSpecification] = [
 	{ "title": "Jogo do galo", "min_player_count": 2, "controller": TicTacToe },
+	{ "title": "Quatro em linha", "min_player_count": 2, "controller": FourInARow },
 ]
 PLAYERS: tuple[Player] | None
 
