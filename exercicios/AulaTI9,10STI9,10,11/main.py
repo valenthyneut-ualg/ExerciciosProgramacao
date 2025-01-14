@@ -2,13 +2,15 @@ from json import loads, dumps
 from os import remove, _exit
 from os.path import exists
 from typing import Dict
+
+from pynput.keyboard import GlobalHotKeys, Listener
+
 from AbstractGame.AbstractController import AbstractController
 from AbstractGame.Player import Player
-from Games.TicTacToe.Controller import Controller as TicTacToe
 from Games.FourInARow.Controller import Controller as FourInARow
 from Games.Glory.Controller import Controller as Glory
 from Games.Hangman.Controller import Controller as Hangman
-from pynput.keyboard import GlobalHotKeys, Listener
+from Games.TicTacToe.Controller import Controller as TicTacToe
 
 listener: Listener | None = None
 
@@ -103,7 +105,14 @@ def setupPlayersFromSave(saveData: Dict):
 
 	savePlayers = saveData.get("players")
 	for player in savePlayers:
-		players.append(Player(player.get("name"), player.get("symbol"), player.get("score")))
+		players.append(
+			Player(
+				player.get("name"),
+				player.get("symbol"),
+				player.get("score"),
+				player.get("totalScore")
+			)
+		)
 
 def pickGame():
 	global game, players
@@ -189,8 +198,8 @@ def main():
 					for key in player.score.keys(): totalScore += player.score[key]
 					player.totalScore = totalScore
 
-				sum = 0
-				for key in player.score.keys(): sum += player.score[key]
+				scoreSum = 0
+				for key in player.score.keys(): scoreSum += player.score[key]
 				print(f'O jogador {player.name} tem {player.score[game.title]} pontos no jogo {game.title}, com {player.totalScore} no total.')
 
 			game = None
