@@ -1,10 +1,14 @@
 from abc import abstractmethod
 from typing import Any
 
+from AbstractGame.Player import Player
 from AbstractGame.Serializable import Serializable
 
 
 class AbstractBoard(Serializable):
+	def __init__(self, players: tuple[Player]):
+		self.players = players
+
 	@abstractmethod
 	def play(self) -> Any: pass
 

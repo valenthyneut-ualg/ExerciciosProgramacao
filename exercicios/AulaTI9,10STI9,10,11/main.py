@@ -1,9 +1,13 @@
 from AbstractGame.GameSpecification import GameSpecification
 from AbstractGame.Player import Player
 
+from Games.TicTacToe.Controller import Controller as TicTacToe
+
 # Global variables
 GAME: GameSpecification | None = None
-GAMES: tuple[GameSpecification] | None
+GAMES: list[GameSpecification] = [
+	{ "title": "Jogo do galo", "min_player_count": 2, "controller": TicTacToe },
+]
 PLAYERS: tuple[Player] | None
 
 
@@ -76,6 +80,6 @@ def main():
 	get_players_from_input()
 	pick_game()
 
-	GAME["controller"].start()
+	GAME["controller"](PLAYERS).start()
 
 if __name__ == "__main__": main()

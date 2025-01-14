@@ -12,9 +12,8 @@ class Board(AbstractBoard):
 			(0, 4, 8), (2, 4, 6)
 		)
 
-		super().__init__()
+		super().__init__(players)
 		self.grid = [" "] * 9
-		self.players = players[0:2]
 
 	def play(self, player: Player = None, pos: tuple[int, int] = None):
 		x, y = pos
@@ -25,9 +24,7 @@ class Board(AbstractBoard):
 		else:
 			raise ValueError(f'A posição {x}, {y} já foi ocupada.')
 
-	def current_state(self) -> (tuple[Literal["ongoing"], None] |
-								tuple[Literal["win"], Player] |
-								tuple[Literal["draw"], None]):
+	def current_state(self) -> tuple[Literal["ongoing", "draw", "win"], Player | None]:
 		if self.grid.count(" ") == 0: return "draw", None
 
 		for cutter in self.WINSTATES:
@@ -41,14 +38,14 @@ class Board(AbstractBoard):
 		return "ongoing", None
 
 	def __str__(self) -> str:
-		grid_string = "  ".join([str(i) for i in range(len(self.grid))])
-		for i in range(3):
-			grid_string += f'{i} '
-			for j in range(3):
-				one_dimension_pos = (3 * i) + j
-				grid_string += f'{self.grid[one_dimension_pos]} '
-
-		return grid_string
+		return "\n".join([
+			"    0   1   2\n",
+			f'0   {self.grid[0]} | {self.grid[1]} | {self.grid[2]}',
+			"   -----------",
+			f'1   {self.grid[3]} | {self.grid[4]} | {self.grid[5]}',
+			"   -----------",
+			f'2   {self.grid[6]} | {self.grid[7]} | {self.grid[8]}'
+		])
 
 	def serialize(self) -> Dict[str, Any]:
 		return {"grid": self.grid}

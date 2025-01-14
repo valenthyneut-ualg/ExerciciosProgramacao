@@ -8,8 +8,7 @@ from .Serializable import Serializable
 class AbstractController(Serializable):
 	def __init__(self, board: AbstractBoard, players: tuple[Player], min_player_count: int):
 		self.board = board
-		self.players = players
-		self.player_count = len(players)
+		self.player_count = len(board.players)
 		self.min_player_count = min_player_count
 
 		if self.player_count < min_player_count:
