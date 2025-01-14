@@ -6,7 +6,7 @@ from AbstractGame.Player import Player
 
 class Board(AbstractBoard):
 	def __init__(self, players: tuple[Player, ...]):
-		super().__init__(players[:1])
+		super().__init__(players[:2])
 		self.word = ""
 		self.underscore_word = ""
 		self.attempts = 10
@@ -41,11 +41,12 @@ class Board(AbstractBoard):
 					self.underscore_word = "".join(temp_underscore_word_list)
 				return "correct"
 			else:
+				self.attempts -= 1
 				return "incorrect"
 
 	def current_state(self) -> str:
-		if self.word == self.underscore_word and self.attempts > 0: return "win"
-		elif self.attempts <= 0: return "loss"
+		if self.attempts <= 0: return "loss"
+		elif self.word == self.underscore_word: return "win"
 		else: return "ongoing"
 
 	def __str__(self) -> str:

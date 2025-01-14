@@ -4,13 +4,15 @@ from AbstractGame.Player import Player
 from Games.TicTacToe.Controller import Controller as TicTacToe
 from Games.FourInARow.Controller import Controller as FourInARow
 from Games.Glory.Controller import Controller as Glory
+from Games.Hangman.Controller import Controller as Hangman
 
 # Global variables
 GAME: GameSpecification | None = None
 GAMES: list[GameSpecification] = [
 	{ "title": "Jogo do galo", "min_player_count": 2, "controller": TicTacToe },
 	{ "title": "Quatro em linha", "min_player_count": 2, "controller": FourInARow },
-	{ "title": "Jogo da glória", "min_player_count": 2, "controller": Glory }
+	{ "title": "Jogo da glória", "min_player_count": 2, "controller": Glory },
+	{ "title": "Jogo da forca", "min_player_count": 1, "controller": Hangman }
 ]
 PLAYERS: tuple[Player] | None
 
@@ -84,6 +86,7 @@ def main():
 	get_players_from_input()
 	pick_game()
 
+	print("\n" * 20)
 	GAME["controller"](PLAYERS).start()
 
 if __name__ == "__main__": main()
