@@ -1,5 +1,5 @@
 from json import loads, dumps
-from os import _exit
+from os import _exit, remove
 from os.path import exists
 from typing import Dict
 
@@ -36,6 +36,7 @@ def json_parse_aid(obj):
 	if isinstance(obj, set):
 		return list(obj)
 	raise TypeError
+
 
 def save():
 	global GAME, PLAYERS
@@ -124,8 +125,19 @@ def get_players_from_input():
 	PLAYERS = tuple(players)
 
 
+def get_players_from_save(save_data: Dict):
+	global PLAYERS
+
+	players: list[Player] = []
+	save_players = save_data.get("players")
+	for player in save_players:
+		players.append(Player(player.get("name"), player.get("symbol")))
+
+	PLAYERS = tuple(players)
+
+
 def pick_game():
-	global GAME, GAMES, PLAYERS
+	global GAME, GAME_INSTANCE, GAMES, PLAYERS
 	print()
 
 	while GAME is None:
@@ -139,19 +151,74 @@ def pick_game():
 		except ValueError:
 			print("Por favor, selecione apenas um jogo presente na lista.")
 
+	GAME_INSTANCE = GAME["controller"](PLAYERS)
+
 # Main function block
 def main():
-	global GAME, GAME_INSTANCE, PLAYERS, LISTENER
+	global SAVEFILE_PATH, GAME, GAME_INSTANCE, PLAYERS, LISTENER
 
-	get_players_from_input()
-	pick_game()
+	save_file_exists = exists(SAVEFILE_PATH)
+	save_data: Dict | None = None
 
-	print("\n" * 20)
-	if LISTENER is None: setup_listener()
+	if save_file_exists:
+		print("Quer continuar a sessão de jogos anterior? Y/n")
+		answer = input("> ").lower()
+
+		print()
+		if answer in ("y", "yes", "sim"):
+			print("A continuar a sessão de jogos anterior...")
+			with open(SAVEFILE_PATH, "r") as save_file:
+				save_data = loads("".join(save_file.readlines()))
+			get_players_from_save(save_data)
+		elif answer in ("n", "no", "nao", "não"):
+			print("A iniciar uma nova sessão de jogos..")
+			remove(SAVEFILE_PATH)
+		else:
+			print("Resposta inválida. O programa irá parar.")
+	else:
+		get_players_from_input()
 
 	try:
-		GAME_INSTANCE = GAME["controller"](PLAYERS)
-		GAME_INSTANCE.start()
+		while True:
+			pick_game()
+
+			if save_data is not None:
+				game_data: Dict = save_data.get("game_data")
+				game_save_data: Dict | None = game_data.get(GAME["title"])
+				if game_save_data is not None:
+					print("\nQuer continuar a sessão deste jogo? Y/n")
+					answer = input("> ").lower()
+
+					print()
+					if answer in ("y", "yes", "sim"):
+						print("A continuar da sessão anterior..")
+						GAME_INSTANCE.deserialize(game_save_data.get("controller_data"))
+						GAME_INSTANCE.board.deserialize(game_save_data.get("board_data"))
+					else:
+						print("A iniciar uma nova sessão..")
+						game_data.pop(GAME["title"])
+						save_data["game_data"] = game_data
+						with open(SAVEFILE_PATH, "w") as save_file:
+							save_file.writelines(dumps(save_data, indent=4, default=json_parse_aid))
+
+			if LISTENER is None: setup_listener()
+			winner = GAME_INSTANCE.start()
+
+			print()
+			for player in PLAYERS:
+				cur_score = player.game_scores.get(GAME["title"])
+				if cur_score is None: cur_score = 0
+				player.game_scores[GAME["title"]] = cur_score
+
+				if winner is not None and player.name == winner.name:
+					player.game_scores[GAME["title"]] += 1
+
+					total_score = 0
+					for key in player.game_scores.keys(): total_score += player.game_scores[key]
+					print(f'O jogador {player.name} tem {player.score[GAME["title"]]} pontos no jogo {GAME["title"]}, com {player.total_score} pontos no total.')
+
+			GAME = None
+			GAME_INSTANCE = None
 	except KeyboardInterrupt:
 		save()
 

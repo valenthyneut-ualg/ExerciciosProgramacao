@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any
+from typing import Any, Dict
 
 from AbstractGame.Player import Player
 from AbstractGame.Serializable import Serializable
@@ -17,3 +17,7 @@ class AbstractBoard(Serializable):
 
 	@abstractmethod
 	def __str__(self) -> str: pass
+
+	def deserialize(self, data: Dict[str, Any]):
+		super().deserialize(data)
+		self.players = tuple(self.players) 

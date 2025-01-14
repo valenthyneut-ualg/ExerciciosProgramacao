@@ -131,3 +131,15 @@ class Board(AbstractBoard):
 			"flag_pos": self.flag_pos,
 			"symbols": self.SYMBOLS
 		}
+
+	def deserialize(self, data: Dict[str, Any]) -> None:
+		super().deserialize(data)
+
+		# this needs to be here so no stupid duck typing stuff happens.
+		translated_mine_pos = set()
+		for pos in self.mine_pos: translated_mine_pos.add(tuple(pos))
+		self.mine_pos = translated_mine_pos
+
+		translated_flag_pos = set()
+		for pos in self.flag_pos: translated_flag_pos.add(tuple(pos))
+		self.flag_pos = translated_flag_pos

@@ -119,3 +119,7 @@ class Board(AbstractBoard):
 
 	def serialize(self) -> Dict[str, Any]:
 		return {"grid": self.grid, "last_played_pos": self.last_played_pos}
+
+	def deserialize(self, data: Dict[str, Any]):
+		super().deserialize(data)
+		self.last_played_pos = tuple(self.last_played_pos)
